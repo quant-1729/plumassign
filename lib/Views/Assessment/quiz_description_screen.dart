@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../Utils/Constants.dart';
-import '../Widgets/primary_button_2.dart';
-import '../services/shared_pref.dart';
+import '../../Utils/Constants.dart';
+import '../../Widgets/primary_button_2.dart';
+import '../../services/shared_pref.dart';
 import 'quiz_loading_screen.dart';
 
 class QuizDescriptionScreen extends StatefulWidget {

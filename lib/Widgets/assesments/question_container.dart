@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_tex/flutter_tex.dart';
-import 'package:plumassign/Utils/constants.dart';
+import 'package:plumassign/Utils/Constants.dart';
 
 class QuestionContainer extends StatefulWidget {
   final Function(List<int>) onSelectedAnswersChanged;
@@ -25,31 +25,43 @@ class _QuestionContainerState extends State<QuestionContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 5.h),
-      color: AppColors.infite_blue_bg2,
+      padding: EdgeInsets.symmetric(vertical: 5.h,horizontal: 4.w),
+      color: AppColors.infinite_white,
       child: Column(
         children: [
-          // Question using TeXView
-          Expanded(
-            flex: 1,
-            child: TeXView(
-              style: TeXViewStyle(padding: TeXViewPadding.only(left: 10, right: 10)),
-              child: TeXViewColumn(children: [
-                TeXViewDocument(widget.Question),
-              ]),
+          Container(
+            width: double.infinity - 5.w,
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+            decoration: BoxDecoration(
+               color: AppColors.infite_blue_bg2,
+              borderRadius: BorderRadius.circular(8.r),
+              border: Border.all(
+                width: 1,
+              ),
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    widget.Question,
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color:AppColors.infinite_black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          
-          // Options using regular Flutter widgets for interactivity
           if (widget.options != null) ...[
             Expanded(
-              flex: 2,
               child: Container(
-                padding: EdgeInsets.all(16.w),
-                child: Column(
-                  children: widget.options!.asMap().entries.map((entry) {
-                    final index = entry.key;
-                    final option = entry.value;
+                padding: EdgeInsets.symmetric(vertical:16.w),
+                child: ListView.builder(
+                  itemCount: widget.options!.length,
+                  itemBuilder: (context, index) {
+                    final option = widget.options![index];
                     final isSelected = selectedIndices.contains(index);
                     
                     return Container(
@@ -124,7 +136,7 @@ class _QuestionContainerState extends State<QuestionContainer> {
                         ),
                       ),
                     );
-                  }).toList(),
+                  },
                 ),
               ),
             ),

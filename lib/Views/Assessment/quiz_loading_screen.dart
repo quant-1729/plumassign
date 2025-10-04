@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../Utils/Constants.dart';
-import '../Models/ai_quiz_models.dart';
-import '../Utils/constants.dart' show AppConfig;
-import '../services/ai_quiz_service.dart';
-import '../services/shared_pref.dart';
+import '../../Utils/Constants.dart';
+import '../../Models/ai_quiz_models.dart';
+import '../../services/ai_quiz_service.dart';
+import '../../services/shared_pref.dart';
 import 'assessment_page.dart';
 
 class QuizLoadingScreen extends StatefulWidget {
@@ -45,7 +44,6 @@ class _QuizLoadingScreenState extends State<QuizLoadingScreen>
 
   Future<void> _generateQuiz() async {
     try {
-      // Get user preferences
       final category = await SharedPrefService.getQuizCategory() ?? 'science';
       final title = await SharedPrefService.getQuizTitle() ?? 'Quiz';
       final description = await SharedPrefService.getQuizDescription() ?? '';

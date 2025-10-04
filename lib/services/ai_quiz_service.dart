@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:plumassign/Utils/constants.dart';
 import '../Utils/Constants.dart';
 import '../Models/ai_quiz_models.dart';
 
@@ -9,20 +8,16 @@ class AIQuizService {
   factory AIQuizService() => _instance;
   AIQuizService._internal();
 
-  // Try Gemini first (free), fallback to OpenAI if needed
   Future<AIQuizResponse> generateQuiz(AIQuizRequest request) async {
     try {
-      // First try Gemini API (free)
-      if (AppConfig.geminiApiKey != "YOUR_GEMINI_API_KEY_HERE") {
+      if (AppConfig.geminiApiKey != null) {
         return await _generateWithGemini(request);
       }
       
-      // Fallback to OpenAI if Gemini key not configured
-      if (AppConfig.openaiApiKey != "YOUR_OPENAI_API_KEY_HERE") {
+      if (AppConfig.openaiApiKey != null) {
         return await _generateWithOpenAI(request);
       }
       
-      // If no API keys configured, return mock data for testing
       return _generateMockQuiz(request);
       
     } catch (e) {
@@ -139,36 +134,101 @@ class AIQuizService {
 
   String _buildPrompt(AIQuizRequest request) {
     return '''
-Generate a quiz with ${request.questionCount} multiple choice questions about ${request.category}.
+You are an expert quiz generator specializing in educational content. Generate a high-quality quiz with exactly ${request.questionCount} multiple choice questions.
 
-Quiz Title: ${request.title}
-Description: ${request.description}
-Difficulty Level: ${request.difficulty}
+QUIZ SPECIFICATIONS:
+- Subject: ${request.category}
+- Title: "${request.title}"
+- Description: "${request.description}"
+- Difficulty: ${request.difficulty}
+- Question Count: ${request.questionCount}
 
-Requirements:
-1. Each question should have exactly 4 options (A, B, C, D)
-2. Questions should be appropriate for ${request.difficulty.toLowerCase()} difficulty
-3. Include a mix of factual and conceptual questions
-4. Make questions engaging and educational
+QUALITY REQUIREMENTS:
+1. Each question must have exactly 4 options (A, B, C, D)
+2. Difficulty should match "${request.difficulty}" level:
+   - Easy: Basic facts and straightforward concepts
+   - Medium: Applied knowledge and moderate complexity
+   - Hard: Advanced concepts, analysis, and critical thinking
+3. Question types: Mix 60% factual, 40% conceptual/analytical
+4. Make questions engaging, clear, and educationally valuable
+5. Ensure all options are plausible but only one is definitively correct
+6. Use appropriate terminology for the difficulty level
+7. Questions should test understanding, not just memorization
 
-Return the response in this EXACT JSON format:
+CATEGORY-SPECIFIC GUIDELINES:
+${_getCategoryGuidelines(request.category)}
+
+OUTPUT FORMAT - Return ONLY valid JSON:
 {
   "questions": [
     {
       "id": "1",
-      "problemStatement": "What is the capital of France?",
-      "options": ["London", "Berlin", "Paris", "Madrid"],
+      "problemStatement": "Clear, specific question text",
+      "options": ["Option A", "Option B", "Option C", "Option D"],
       "correctAnswer": 2
     }
   ]
 }
 
-Important: 
-- correctAnswer should be the INDEX of the correct option (0, 1, 2, or 3)
-- problemStatement should be clear and concise
-- options should be plausible but only one should be correct
-- Focus on ${request.category} topics
+CRITICAL RULES:
+- correctAnswer must be the INDEX (0, 1, 2, or 3) of the correct option
+- problemStatement must be complete, clear, and grammatically correct
+- All options must be plausible and well-distributed
+- Return ONLY the JSON object, no additional text
+- Ensure JSON is valid and parseable
 ''';
+  }
+
+  String _getCategoryGuidelines(String category) {
+    switch (category.toLowerCase()) {
+      case 'science':
+        return '''
+- Focus on fundamental scientific principles, natural phenomena, and scientific method
+- Include topics: physics, chemistry, biology, earth sciences
+- Use accurate scientific terminology and concepts
+- Include practical applications and real-world examples''';
+      
+      case 'technology':
+        return '''
+- Cover programming concepts, computer science fundamentals, and tech innovations
+- Include topics: algorithms, data structures, software development, AI/ML basics
+- Use current technology trends and practical applications
+- Balance theoretical knowledge with practical skills''';
+      
+      case 'history':
+        return '''
+- Cover significant historical events, figures, and civilizations
+- Include topics: world history, cultural developments, historical timelines
+- Use accurate historical facts and context
+- Include cause-and-effect relationships and historical significance''';
+      
+      case 'mathematics':
+        return '''
+- Focus on mathematical concepts, problem-solving, and logical reasoning
+- Include topics: algebra, geometry, calculus, statistics, probability
+- Use clear mathematical notation and step-by-step reasoning
+- Include practical applications and real-world problems''';
+      
+      case 'literature':
+        return '''
+- Cover literary works, authors, genres, and literary analysis
+- Include topics: classic literature, literary devices, themes, cultural impact
+- Use proper literary terminology and critical analysis
+- Include diverse authors and time periods''';
+      
+      case 'geography':
+        return '''
+- Focus on world geography, physical features, and human geography
+- Include topics: countries, capitals, physical geography, climate, culture
+- Use accurate geographical facts and current information
+- Include maps, coordinates, and geographical relationships''';
+      
+      default:
+        return '''
+- Focus on fundamental concepts and principles in the subject area
+- Use clear, educational content appropriate for the difficulty level
+- Include practical applications and real-world relevance''';
+    }
   }
 
   AIQuizResponse _parseAIResponse(String content) {

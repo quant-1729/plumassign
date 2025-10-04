@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:plumassign/Views/assessment_page.dart';
+import 'package:plumassign/Views/Assessment/assessment_page.dart';
 import 'package:plumassign/Views/onborading/onbordignmain.dart';
-import 'package:plumassign/Views/quiz_category_selection.dart';
+import 'package:plumassign/Views/Assessment/quiz_category_selection.dart';
 import 'package:plumassign/services/shared_pref.dart';
 
 class Wrapper extends StatefulWidget {

@@ -3,8 +3,8 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../Utils/Constants.dart';
 import '../../services/shared_pref.dart';
-import '../../Views/assessment_page.dart';
-import '../../Views/quiz_category_selection.dart';
+import '../Assessment/assessment_page.dart';
+import '../Assessment/quiz_category_selection.dart';
 import '../../Widgets/primary_button_2.dart';
 
 class OnbordingScreen_one extends StatelessWidget {

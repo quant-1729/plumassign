@@ -1,20 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 
-import '../Utils/Constants.dart';
-import '../Widgets/primary_button_2.dart';
-import 'assignment_level_page_2.dart';
+import '../../Utils/Constants.dart';
+import '../../Widgets/primary_button_2.dart';
 
 class Survey extends StatefulWidget {
   final bool didrequirehelp;
   final String assignmentid;
+  final VoidCallback? onSurveyCompleted;
 
   const Survey({
     super.key,
     required this.didrequirehelp,
     required this.assignmentid,
+    this.onSurveyCompleted,
   });
 
   @override
@@ -28,6 +28,27 @@ class _SurveyState extends State<Survey> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String? surveyQuestion;
   List<String> surveyOptions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Set default survey question and options if not provided
+    if (surveyQuestion == null) {
+      surveyQuestion = "How was your quiz experience?";
+    }
+    if (surveyOptions.isEmpty) {
+      surveyOptions = [
+        "The quiz was too easy",
+        "The quiz was too difficult", 
+        "Questions were clear and well-written",
+        "I learned something new",
+        "The interface was user-friendly",
+        "I would recommend this to others",
+        "The quiz length was appropriate",
+        "I enjoyed the experience",
+      ];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,13 +127,8 @@ class _SurveyState extends State<Survey> {
                 backgroundColor: AppColors.infinite_white,
                 textColor: AppColors.infinite_orange,
                 onPressed: () {
-                  // Navigator.pushReplacement(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) =>
-                  //         AssignmentLevelPage2(chapterId: chapterId),
-                  //   ),
-                  // );
+                  Navigator.pop(context);
+
                 },
               ),
             ),
@@ -134,6 +150,26 @@ class _SurveyState extends State<Survey> {
                     );
                     return;
                   } else {
+                    // Show success message
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Thank you for your feedback!',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.green,
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+
+                    // Auto-pop after a short delay
+                    Future.delayed(Duration(milliseconds: 1500), () {
+                      if (widget.onSurveyCompleted != null) {
+                        widget.onSurveyCompleted!();
+                      }
+                      Navigator.pop(context);
+                    });
+
                     // final assignmentController = AssessmentController();
                     // assignmentController.submitSurvey(
                     //   context,
@@ -142,13 +178,6 @@ class _SurveyState extends State<Survey> {
                     //     message: reviewController.text,
                     //     rating: starRating,
                     //     options: selectedOptions,
-                    //   ),
-                    // );
-                    // Navigator.pushReplacement(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) =>
-                    //         AssignmentLevelPage2(chapterId: chapterId),
                     //   ),
                     // );
                   }

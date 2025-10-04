@@ -25,7 +25,7 @@ class _OnBordingMainState extends State<OnBordingMain> {
             totalpages: 3,
             heading: "Heading 1",
             description: "This is the first page",
-            image_route: 'assets/Onboarding1.png',
+            image_route: 'Assets/Onboarding (1).png',
           ),
           OnbordingScreen_one(
             controller: _controller,
@@ -33,7 +33,7 @@ class _OnBordingMainState extends State<OnBordingMain> {
             totalpages: 3,
             heading: "Heading 2",
             description: "This is the second page",
-            image_route: 'assets/Onboarding2.png',
+            image_route: 'Assets/Onboarding (2).png',
           ),
           OnbordingScreen_one(
             controller: _controller,
@@ -41,7 +41,7 @@ class _OnBordingMainState extends State<OnBordingMain> {
             totalpages: 3,
             heading: "Heading 3",
             description: "This is the third page",
-            image_route: 'assets/Onboarding3.png',
+            image_route: 'Assets/Onboarding (3).png',
           ),
         ],
       ),

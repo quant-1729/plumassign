@@ -11,7 +11,7 @@ class AppFonts {
 class AppColors {
   static const Color infinite_blue = Color(0xFF004E89);
   static const Color infite_blue_bg2 = Color(0xFFF1F6FF);
-  static const Color infinite_orange = Color(0xFFFF6B35);
+  static const Color infinite_orange = Color(0xFF7309e3);
   static const Color infinite_grey = Color(0xFFF1F6FF);
   static const Color infinite_black = Color(0xFF303030);
   static const Color infinite_white = Color(0xFFFFFFFF);
@@ -27,12 +27,10 @@ class AppTextsizes {
 }
 
 class AppConfig {
-  // AI API Configuration
-  static const String geminiApiKey = "YOUR_GEMINI_API_KEY_HERE"; // Replace with your actual API key
+  static const String geminiApiKey = "AIzaSyB47jRVUgjiTjs_UuKgW8qeQ_L_RxOv6dE";
   static const String geminiApiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent";
   static const int quizQuestionCount = 7;
   
-  // Fallback OpenAI configuration (if you prefer OpenAI)
   static const String openaiApiKey = "YOUR_OPENAI_API_KEY_HERE"; // Replace with your actual API key
   static const String openaiApiUrl = "https://api.openai.com/v1/chat/completions";
 }
